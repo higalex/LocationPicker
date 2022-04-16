@@ -80,7 +80,7 @@ open class LocationPickerViewController: UIViewController {
 	static let SearchTermKey = "SearchTermKey"
 	
 	let historyManager = SearchHistoryManager()
-	let locationManager = CLLocationManager()
+	public let locationManager = CLLocationManager()
 	let geocoder = CLGeocoder()
 	var localSearch: MKLocalSearch?
 	var searchTimer: Timer?
