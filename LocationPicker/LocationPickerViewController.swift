@@ -257,7 +257,7 @@ open class LocationPickerViewController: UIViewController {
 		showCurrentLocation()
 	}
 	
-	func showCurrentLocation(_ animated: Bool = true) {
+	public func showCurrentLocation(_ animated: Bool = true) {
 		let listener = CurrentLocationListener(once: true) { [weak self] location in
 			self?.showCoordinates(location.coordinate, animated: animated)
 		}
