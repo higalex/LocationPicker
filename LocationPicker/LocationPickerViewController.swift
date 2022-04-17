@@ -75,7 +75,7 @@ open class LocationPickerViewController: UIViewController {
 			}
 		}
 	}
-	
+    
 	public var location: Location? {
 		didSet {
 			if isViewLoaded {
@@ -278,25 +278,17 @@ open class LocationPickerViewController: UIViewController {
 		mapView.setRegion(region, animated: animated)
 	}
 
-    func selectLocation(location: CLLocation) {
-        // add point annotation to map
-        let annotation = MKPointAnnotation()
-        annotation.coordinate = location.coordinate
-        mapView.addAnnotation(annotation)
-
+    public func selectLocation(location: CLLocation) {
         geocoder.cancelGeocode()
         geocoder.reverseGeocodeLocation(location) { response, error in
             if let error = error as NSError?, error.code != 10 { // ignore cancelGeocode errors
                 // show error and remove annotation
                 let alert = UIAlertController(title: nil, message: error.localizedDescription, preferredStyle: .alert)
                 alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: { _ in }))
-                self.present(alert, animated: true) {
-                    self.mapView.removeAnnotation(annotation)
-                }
+                self.present(alert, animated: true)
             } else if let placemark = response?.first {
                 // get POI name from placemark if any
                 let name = placemark.areasOfInterest?.first
-
                 // pass user selected location too
                 self.location = Location(name: name, location: location, placemark: placemark)
             }
