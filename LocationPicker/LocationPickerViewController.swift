@@ -43,7 +43,15 @@ open class LocationPickerViewController: UIViewController {
     
     /// default: "Select"
     public var selectButtonTitle = "Select"
-	
+    
+    public var navigationBarTitle: String?
+    
+    public var navigationBarTitleFont: UIFont?
+    
+    public var navigationBarBackgroundColor: UIColor?
+
+    public var tintColor: UIColor?
+
 	public lazy var currentLocationButtonBackground: UIColor = {
 		if let navigationBar = self.navigationController?.navigationBar,
 			let barTintColor = navigationBar.barTintColor {
@@ -148,11 +156,28 @@ open class LocationPickerViewController: UIViewController {
 
         if #available(iOS 13.0, *), let navigationController = navigationController {
             let appearance = navigationController.navigationBar.standardAppearance
-            appearance.backgroundColor = navigationController.navigationBar.barTintColor
+            if let color = navigationBarBackgroundColor {
+                appearance.backgroundColor = color
+            } else {
+                appearance.backgroundColor = navigationController.navigationBar.barTintColor
+            }
             navigationItem.standardAppearance = appearance
             navigationItem.scrollEdgeAppearance = appearance
         }
-		
+        
+        if let title = navigationBarTitle {
+            navigationItem.title = title
+        }
+        
+        if let font = navigationBarTitleFont {
+            navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: font]
+        }
+        
+        if let color = tintColor {
+            let cancelButtonAttributes = [NSAttributedString.Key.foregroundColor: color]
+            UIBarButtonItem.appearance().setTitleTextAttributes(cancelButtonAttributes , for: .normal)
+        }
+        
 		locationManager.delegate = self
 		mapView.delegate = self
 		searchBar.delegate = self
@@ -390,7 +415,11 @@ extension LocationPickerViewController: MKMapViewDelegate {
             let width = titleLabel.textRect(forBounds: CGRect(x: 0, y: 0, width: Int.max, height: 30), limitedToNumberOfLines: 1).width
             button.frame.size = CGSize(width: width, height: 30.0)
         }
-		button.setTitleColor(view.tintColor, for: UIControl.State())
+        if let color = tintColor {
+            button.setTitleColor(color, for: UIControl.State())
+        } else {
+            button.setTitleColor(view.tintColor, for: UIControl.State())
+        }
 		return button
 	}
 	
