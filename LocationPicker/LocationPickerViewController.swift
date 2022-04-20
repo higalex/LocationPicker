@@ -213,6 +213,11 @@ open class LocationPickerViewController: UIViewController {
 	
 	var presentedInitialLocation = false
 	
+    open override func viewWillDisappear(_ animated: Bool) {
+        // Resign first responder to avoid the search bar disappearing issue
+        searchController.isActive = false
+    }
+    
 	open override func viewDidLayoutSubviews() {
 		super.viewDidLayoutSubviews()
 		if let button = locationButton {
